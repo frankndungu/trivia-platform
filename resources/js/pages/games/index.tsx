@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 
 interface Game {
     id: number;
@@ -36,10 +36,21 @@ export default function GameIndex({ games }: Props) {
                                 <p className="text-sm text-gray-600">{game.description || 'No description provided'}</p>
                                 <p className="mt-1 text-xs text-gray-400">Created: {new Date(game.created_at).toLocaleString()}</p>
 
-                                <div className="mt-2">
+                                <div className="mt-2 flex items-center gap-4">
                                     <Link href={`/games/${game.id}/edit`} className="text-sm text-blue-600 hover:underline">
                                         Edit
                                     </Link>
+
+                                    <button
+                                        onClick={() => {
+                                            if (confirm('Are you sure you want to delete this game?')) {
+                                                router.delete(`/games/${game.id}`);
+                                            }
+                                        }}
+                                        className="text-sm text-red-600 hover:underline"
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </li>
                         ))}
