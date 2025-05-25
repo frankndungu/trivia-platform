@@ -10,12 +10,12 @@ class GameController extends Controller
     public function index()
     {
         $games = auth()->user()->games()->latest()->get();
-        return inertia('Games/Index', ['games' => $games]);
+        return inertia('games/index', ['games' => $games]);
     }
 
     public function create()
     {
-        return inertia('Games/Create');
+        return inertia('games/create');
     }
 
     public function store(Request $request)
@@ -31,7 +31,7 @@ class GameController extends Controller
     public function show(Game $game)
     {
         // Optionally, check owner or invitation
-        return inertia('Games/Show', [
+        return inertia('games/show', [
             'game' => $game->load('questions.choices', 'creator'),
         ]);
     }
@@ -42,7 +42,7 @@ class GameController extends Controller
         if ($game->user_id !== auth()->id()) {
             abort(403);
         }
-        return inertia('Games/Edit', ['game' => $game]);
+        return inertia('games/edit', ['game' => $game]);
     }
 
     public function update(Request $request, Game $game)

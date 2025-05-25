@@ -11,42 +11,37 @@ class AuthController extends Controller
 {
     /**
      * Handle API login request.
-     * PURE API - No sessions, returns JSON only
      */
     public function login(LoginRequest $request): JsonResponse
     {
-        // AUTHENTICATE USER
+        // Authenticate using LoginRequest (from Breeze)
         $request->authenticate();
-        
-        // GET AUTHENTICATED USER
+
         $user = $request->user();
-        
-        // OPTIONAL: Create Sanctum token for stateless API
-        // $token = $user->createToken('api-token')->plainTextToken;
-        
-        // RETURN JSON RESPONSE
+
+        // Create a Sanctum token
+        $token = $user->createToken('api-token')->plainTextToken;
+
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
             'data' => [
                 'user' => $user,
-                // 'token' => $token, // Uncomment if using tokens
+                'token' => $token
             ]
         ]);
     }
 
     /**
      * Handle API logout request.
-     * PURE API - No sessions needed
      */
     public function logout(): JsonResponse
     {
-        // If using Sanctum tokens
-        // auth()->user()->currentAccessToken()->delete();
-        
-        // If using session-based (though not recommended for API)
-        Auth::logout();
-        
+        $user = auth()->user();
+
+        // Delete current token
+        $user->currentAccessToken()->delete();
+
         return response()->json([
             'success' => true,
             'message' => 'Logout successful'
