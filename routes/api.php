@@ -14,5 +14,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/games', [GameApiController::class, 'store']);
+        Route::get('/games', [GameApiController::class, 'index']);
+        Route::get('/games/{game}', [GameApiController::class, 'show']);
     });
 });

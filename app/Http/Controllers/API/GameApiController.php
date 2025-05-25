@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 
 class GameApiController extends Controller
 {
+    public function index(Request $request)
+    {
+        $games = $request->user()->games()->latest()->get();
+
+        return response()->json([
+            'success' => true,
+            'games' => $games
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -22,4 +32,24 @@ class GameApiController extends Controller
             'game' => $game,
         ], 201);
     }
+
+    public function show(Request $request, Game $game)
+    {
+        // Only allow the owner to view the game
+        if ($game->user_id !== $request->user()->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized access to this game.'
+            ], 403);
+        }
+
+        // Load future relationships like questions, choices if needed
+        // $game->load('questions.choices'); 
+
+        return response()->json([
+            'success' => true,
+            'game' => $game
+        ]);
+    }
+
 }
