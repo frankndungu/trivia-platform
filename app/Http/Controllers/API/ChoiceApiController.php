@@ -22,21 +22,25 @@ class ChoiceApiController extends Controller
      */
     public function store(Request $request, Question $question)
     {
-        // Only allow the owner of the game to add choices
         if ($question->game->user_id !== $request->user()->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
         $data = $request->validate([
-            'choice_text' => 'required|string|max:255',
-            'is_correct' => 'required|boolean',
+            'choices' => 'required|array|min:2',
+            'choices.*.choice_text' => 'required|string|max:255',
+            'choices.*.is_correct' => 'required|boolean',
         ]);
 
-        $choice = $question->choices()->create($data);
+        $createdChoices = [];
+
+        foreach ($data['choices'] as $choiceData) {
+            $createdChoices[] = $question->choices()->create($choiceData);
+        }
 
         return response()->json([
-            'message' => 'Choice added successfully.',
-            'choice' => $choice,
+            'message' => 'Choices added successfully.',
+            'choices' => $createdChoices,
         ], 201);
     }
 

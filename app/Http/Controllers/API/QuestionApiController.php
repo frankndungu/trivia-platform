@@ -12,9 +12,18 @@ class QuestionApiController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, Game $game)
     {
-        //
+        if ($game->user_id !== $request->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $questions = $game->questions()->with('choices')->get();
+
+        return response()->json([
+            'success' => true,
+            'questions' => $questions
+        ]);
     }
 
     /**

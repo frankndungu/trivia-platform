@@ -22,5 +22,6 @@ Route::prefix('v1')->group(function () {
         Route::delete('/games/{game}', [GameApiController::class, 'destroy']);
         Route::post('/games/{game}/questions', [QuestionApiController::class, 'store']);
         Route::post('/questions/{question}/choices', [ChoiceApiController::class, 'store']);
+        Route::get('/games/{game}/questions', [QuestionApiController::class, 'index']);
     });
 });
