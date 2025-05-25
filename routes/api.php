@@ -16,5 +16,6 @@ Route::prefix('v1')->group(function () {
         Route::post('/games', [GameApiController::class, 'store']);
         Route::get('/games', [GameApiController::class, 'index']);
         Route::get('/games/{game}', [GameApiController::class, 'show']);
+        Route::put('/games/{game}', [GameApiController::class, 'update']);
     });
 });

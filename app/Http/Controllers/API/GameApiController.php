@@ -52,4 +52,28 @@ class GameApiController extends Controller
         ]);
     }
 
+    public function update(Request $request, Game $game)
+    {
+        // Check that the game belongs to the authenticated user
+        if ($game->user_id !== $request->user()->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to update this game.'
+            ], 403);
+        }
+
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $game->update($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Game updated successfully',
+            'game' => $game,
+        ]);
+    }
+
 }
