@@ -52,24 +52,56 @@ class QuestionApiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, Question $question)
     {
-        //
+        if ($question->game->user_id !== $request->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $question->load('choices');
+
+        return response()->json([
+            'success' => true,
+            'question' => $question,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Question $question)
     {
-        //
+        if ($question->game->user_id !== $request->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $data = $request->validate([
+            'question_text' => 'required|string|max:255',
+        ]);
+
+        $question->update($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Question updated successfully.',
+            'question' => $question,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, Question $question)
     {
-        //
+        if ($question->game->user_id !== $request->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $question->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Question deleted successfully.'
+        ]);
     }
 }
