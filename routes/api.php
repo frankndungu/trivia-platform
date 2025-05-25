@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GameApiController;
+use App\Http\Controllers\API\QuestionApiController;
+use App\Http\Controllers\API\ChoiceApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,5 +20,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/games/{game}', [GameApiController::class, 'show']);
         Route::put('/games/{game}', [GameApiController::class, 'update']);
         Route::delete('/games/{game}', [GameApiController::class, 'destroy']);
+        Route::post('/games/{game}/questions', [QuestionApiController::class, 'store']);
+        Route::post('/questions/{question}/choices', [ChoiceApiController::class, 'store']);
     });
 });
