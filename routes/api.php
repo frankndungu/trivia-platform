@@ -21,7 +21,11 @@ Route::prefix('v1')->group(function () {
         Route::put('/games/{game}', [GameApiController::class, 'update']);
         Route::delete('/games/{game}', [GameApiController::class, 'destroy']);
         Route::post('/games/{game}/questions', [QuestionApiController::class, 'store']);
+        Route::get('/questions/{question}/choices', [ChoiceApiController::class, 'index']);
         Route::post('/questions/{question}/choices', [ChoiceApiController::class, 'store']);
+        Route::get('/choices/{choice}', [ChoiceApiController::class, 'show']);
+        Route::put('/choices/{choice}', [ChoiceApiController::class, 'update']);
+        Route::delete('/choices/{choice}', [ChoiceApiController::class, 'destroy']);
         Route::get('/games/{game}/questions', [QuestionApiController::class, 'index']);
         Route::get('/questions/{question}', [QuestionApiController::class, 'show']);
         Route::put('/questions/{question}', [QuestionApiController::class, 'update']);
