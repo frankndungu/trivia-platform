@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
 interface Game {
     id: number;
@@ -35,6 +35,12 @@ export default function GameIndex({ games }: Props) {
                                 <h2 className="text-lg font-semibold">{game.title}</h2>
                                 <p className="text-sm text-gray-600">{game.description || 'No description provided'}</p>
                                 <p className="mt-1 text-xs text-gray-400">Created: {new Date(game.created_at).toLocaleString()}</p>
+
+                                <div className="mt-2">
+                                    <Link href={`/games/${game.id}/edit`} className="text-sm text-blue-600 hover:underline">
+                                        Edit
+                                    </Link>
+                                </div>
                             </li>
                         ))}
                     </ul>
