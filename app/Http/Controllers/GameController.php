@@ -25,7 +25,8 @@ class GameController extends Controller
             'description' => 'nullable|string',
         ]);
         $game = auth()->user()->games()->create($data);
-        return redirect()->route('games.index')->with('success', 'Game created!');
+        return redirect()->route('games.questions', $game->id)->with('success', 'Game created! Now add your questions.');
+
     }
 
     public function show(Game $game)
@@ -65,6 +66,19 @@ class GameController extends Controller
         }
         $game->delete();
         return redirect()->route('games.index')->with('success', 'Game deleted!');
+    }
+
+    public function manageQuestions(Game $game)
+    {
+        if ($game->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $game->load('questions.choices');
+
+        return inertia('games/questions', [
+            'game' => $game,
+        ]);
     }
 
 }

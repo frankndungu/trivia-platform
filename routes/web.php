@@ -13,7 +13,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
     Route::resource('games', GameController::class);
+    Route::get('/games/{game}/questions', [GameController::class, 'manageQuestions'])
+    ->name('games.questions');
 
 });
 
