@@ -76,4 +76,21 @@ class GameApiController extends Controller
         ]);
     }
 
+    public function destroy(Request $request, Game $game)
+    {
+        // Authorize: only the owner can delete
+        if ($game->user_id !== $request->user()->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to delete this game.'
+            ], 403);
+        }
+
+        $game->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Game deleted successfully.'
+        ]);
+    }
 }
