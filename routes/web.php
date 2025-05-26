@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\QuizAttempt;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\LeaderboardController;
 
 use Inertia\Inertia;
 
@@ -38,6 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/play/{game}', [GameController::class, 'submit'])->name('games.submit');
     Route::get('/play/{game}', [GameController::class, 'play'])->name('games.play');
     Route::post('/play/{game}', [GameController::class, 'submit'])->name('games.submit');
+    Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard');
 });
 
 require __DIR__.'/settings.php';

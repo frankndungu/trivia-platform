@@ -100,8 +100,8 @@ class GameController extends Controller
 
     public function play(Game $game)
     {
-        if ($game->user_id !== auth()->id()) {
-            abort(403);
+        if ($game->questions()->count() === 0) {
+            abort(404, 'This game has no questions yet.');
         }
 
         $game->load('questions.choices');
