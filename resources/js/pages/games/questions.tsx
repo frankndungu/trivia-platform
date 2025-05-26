@@ -1,6 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
+import toast from 'react-hot-toast';
 
 interface Choice {
     choice_text: string;
@@ -30,7 +31,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function ManageQuestions({ game }: Props) {
-    const { data, setData, post, processing, errors, reset } = useForm<{
+    const { data, setData, post, processing, errors } = useForm<{
         question_text: string;
         choices: { choice_text: string; is_correct: boolean }[];
     }>({
@@ -47,6 +48,7 @@ export default function ManageQuestions({ game }: Props) {
         e.preventDefault();
         post(`/games/${game.id}/questions`, {
             onSuccess: () => {
+                toast.success('Question added successfully');
                 setData({
                     question_text: '',
                     choices: [

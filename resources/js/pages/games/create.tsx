@@ -1,6 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
+import toast from 'react-hot-toast';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -16,7 +17,11 @@ export default function CreateGame() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post('/games');
+        post('/games', {
+            onSuccess: () => {
+                toast.success('Game created successfully');
+            },
+        });
     };
 
     return (

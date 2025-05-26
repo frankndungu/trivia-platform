@@ -2,6 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface Choice {
     id: number;
@@ -50,10 +51,15 @@ export default function EditQuestion({ question }: Props) {
 
     const handleDelete = () => {
         router.delete(`/questions/${question.id}`, {
-            onSuccess: () =>
+            onSuccess: () => {
+                toast.success('Question deleted successfully');
                 router.visit(`/games/${question.game_id}/questions`, {
                     preserveScroll: true,
-                }),
+                });
+            },
+            onError: () => {
+                toast.error('Failed to delete question');
+            },
         });
     };
 

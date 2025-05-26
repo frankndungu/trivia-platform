@@ -1,6 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
+import toast from 'react-hot-toast';
 
 interface Game {
     id: number;
@@ -24,7 +25,15 @@ export default function InviteUser({ game }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(`/games/${game.id}/invite`);
+        post(`/games/${game.id}/invite`, {
+            onSuccess: () => {
+                toast.success('Invitation sent successfully');
+                setData('email', '');
+            },
+            onError: () => {
+                toast.error('Failed to send invitation');
+            },
+        });
     };
 
     return (
