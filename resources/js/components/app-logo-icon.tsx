@@ -2,21 +2,12 @@ import { SVGAttributes } from 'react';
 
 export default function AppLogoIcon(props: SVGAttributes<SVGElement>) {
     return (
-        <svg {...props} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <style>{`.a{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;}`}</style>
-            </defs>
+        <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
-                className="a"
-                d="M24,4.5h0a4.8764,4.8764,0,0,1,4.8777,4.8749v29.25A4.8764,4.8764,0,0,1,24,43.5h0a4.8764,4.8764,0,0,1-4.8777-4.8749V9.3752A4.8764,4.8764,0,0,1,24,4.5Z"
-            />
-            <path
-                className="a"
-                d="M5.4646,5.39a.889.889,0,0,1,.89-.8892h0A8.8672,8.8672,0,0,1,15.22,13.361v29.25a.889.889,0,0,1-.89.8892h0a8.8672,8.8672,0,0,1-8.8658-8.8607Z"
-            />
-            <path
-                className="a"
-                d="M32.78,13.3607A8.8672,8.8672,0,0,1,41.6457,4.5h0a.889.889,0,0,1,.89.8892v29.25A8.8672,8.8672,0,0,1,33.67,43.5h0a.889.889,0,0,1-.89-.8892Z"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
             />
         </svg>
     );
