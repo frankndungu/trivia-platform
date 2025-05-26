@@ -9,14 +9,6 @@ use Illuminate\Http\Request;
 class QuestionController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
     public function create()
@@ -50,21 +42,21 @@ class QuestionController extends Controller
 
         return redirect()->back()->with('success', 'Question added!');
     }
-    
-    /**
-     * Display the specified resource.
-     */
-    public function show(Question $question)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Question $question)
     {
-        //
+        $question->load('choices', 'game');
+
+        if ($question->game->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return inertia('questions/edit', [
+            'question' => $question,
+        ]);
     }
 
     /**
@@ -72,7 +64,30 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        //
+        $question->load('game');
+
+        if ($question->game->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'question_text' => 'required|string|max:255',
+            'choices' => 'required|array|min:2',
+            'choices.*.id' => 'required|integer|exists:choices,id',
+            'choices.*.choice_text' => 'required|string|max:255',
+            'choices.*.is_correct' => 'required|boolean',
+        ]);
+
+        $question->update(['question_text' => $data['question_text']]);
+
+        foreach ($data['choices'] as $choiceData) {
+            $question->choices()->where('id', $choiceData['id'])->update([
+                'choice_text' => $choiceData['choice_text'],
+                'is_correct' => $choiceData['is_correct'],
+            ]);
+        }
+
+        return redirect()->route('games.questions', $question->game->id)->with('success', 'Question updated.');
     }
 
     /**
@@ -80,6 +95,14 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        //
+        $question->load('game');
+
+        if ($question->game->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $question->delete();
+
+        return redirect()->route('games.questions', $question->game->id)->with('success', 'Question deleted.');
     }
 }

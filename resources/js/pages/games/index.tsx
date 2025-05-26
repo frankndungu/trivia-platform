@@ -82,6 +82,13 @@ export default function GameIndex({ games }: Props) {
                                                             </li>
                                                         ))}
                                                     </ul>
+
+                                                    {/* Manage button */}
+                                                    <div className="mt-2">
+                                                        <Link href={`/questions/${q.id}/edit`} className="text-sm text-indigo-600 hover:underline">
+                                                            Manage Question
+                                                        </Link>
+                                                    </div>
                                                 </li>
                                             ))}
                                         </ul>

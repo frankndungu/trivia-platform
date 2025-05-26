@@ -19,6 +19,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/games/{game}/questions', [GameController::class, 'manageQuestions'])
     ->name('games.questions');
     Route::post('/games/{game}/questions', [QuestionController::class, 'store'])->name('questions.store');
+    Route::get('/questions/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
+    Route::put('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
+    Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
 });
 
 require __DIR__.'/settings.php';
