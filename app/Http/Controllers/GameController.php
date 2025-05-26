@@ -110,4 +110,41 @@ class GameController extends Controller
         ]);
     }
 
+    public function submit(Request $request, Game $game)
+    {
+        $game->load('questions.choices');
+
+        $data = $request->validate([
+            'answers' => 'required|array',
+        ]);
+
+        $correctCount = 0;
+        $total = $game->questions->count();
+
+        foreach ($game->questions as $question) {
+            $selectedChoiceId = $data['answers'][$question->id] ?? null;
+
+            if (!$selectedChoiceId) {
+                continue;
+            }
+
+            $correct = $question->choices->firstWhere(fn($c) => $c->is_correct && $c->id == $selectedChoiceId);
+
+            if ($correct) {
+                $correctCount++;
+            }
+        }
+
+        $score = [
+            'correct' => $correctCount,
+            'total' => $total,
+            'percentage' => $total > 0 ? round(($correctCount / $total) * 100) : 0,
+        ];
+
+        return inertia('games/result', [
+            'game' => $game,
+            'score' => $score,
+        ]);
+    }
+
 }

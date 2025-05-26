@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/play', [GameController::class, 'available'])->name('games.available');
     Route::post('/play/{game}', [GameController::class, 'submit'])->name('games.submit');
     Route::get('/play/{game}', [GameController::class, 'play'])->name('games.play');
+    Route::post('/play/{game}', [GameController::class, 'submit'])->name('games.submit');
 });
 
 require __DIR__.'/settings.php';
