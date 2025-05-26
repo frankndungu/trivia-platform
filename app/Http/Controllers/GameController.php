@@ -9,7 +9,11 @@ class GameController extends Controller
 {
     public function index()
     {
-        $games = auth()->user()->games()->latest()->get();
+        $games = auth()->user()
+            ->games()
+            ->with('questions.choices') // eager load questions and their choices
+            ->latest()
+            ->get();
         return inertia('games/index', ['games' => $games]);
     }
 

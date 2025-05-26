@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, Gamepad, Gamepad2, LayoutGrid } from 'lucide-react';
+import { BookOpen, Folder, Gamepad, LayoutGrid, Settings2Icon } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -15,12 +15,12 @@ const mainNavItems: NavItem[] = [
     },
 
     {
-        title: 'Your Games',
+        title: 'Manage Games',
         href: '/games',
-        icon: Gamepad2,
+        icon: Settings2Icon,
     },
     {
-        title: 'Create New Game',
+        title: 'Create Game',
         href: '/games/create',
         icon: Gamepad,
     },

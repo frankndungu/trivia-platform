@@ -2,11 +2,23 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 
+interface Choice {
+    choice_text: string;
+    is_correct: boolean;
+}
+
+interface Question {
+    id: number;
+    question_text: string;
+    choices: Choice[];
+}
+
 interface Game {
     id: number;
     title: string;
     description: string | null;
     created_at: string;
+    questions?: Question[];
 }
 
 interface Props {
@@ -29,7 +41,7 @@ export default function GameIndex({ games }: Props) {
                 {games.length === 0 ? (
                     <p className="text-gray-600">You haven’t created any games yet.</p>
                 ) : (
-                    <ul className="space-y-4">
+                    <ul className="space-y-6">
                         {games.map((game) => (
                             <li key={game.id} className="rounded border border-gray-200 p-4 shadow-sm hover:bg-gray-50">
                                 <h2 className="text-lg font-semibold">{game.title}</h2>
@@ -52,6 +64,29 @@ export default function GameIndex({ games }: Props) {
                                         Delete
                                     </button>
                                 </div>
+
+                                {/* Show questions + choices */}
+                                {game.questions && game.questions.length > 0 && (
+                                    <div className="mt-4">
+                                        <h3 className="text-sm font-semibold text-gray-700">
+                                            {game.questions.length} Question{game.questions.length === 1 ? '' : 's'}
+                                        </h3>
+                                        <ul className="mt-2 space-y-2 text-sm">
+                                            {game.questions.map((q) => (
+                                                <li key={q.id} className="rounded border bg-gray-50 p-3">
+                                                    <p className="font-medium text-gray-800">{q.question_text}</p>
+                                                    <ul className="mt-1 ml-4 list-disc text-gray-700">
+                                                        {q.choices.map((c, i) => (
+                                                            <li key={i} className={c.is_correct ? 'font-semibold text-green-600' : ''}>
+                                                                {c.choice_text} {c.is_correct && '(Correct)'}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </li>
                         ))}
                     </ul>
