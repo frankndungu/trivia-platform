@@ -23,6 +23,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/questions/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
     Route::put('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
     Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+    Route::get('/play', [GameController::class, 'available'])->name('games.available');
+    Route::post('/play/{game}', [GameController::class, 'submit'])->name('games.submit');
+    Route::get('/play/{game}', [GameController::class, 'play'])->name('games.play');
 });
 
 require __DIR__.'/settings.php';

@@ -85,4 +85,29 @@ class GameController extends Controller
         ]);
     }
 
+    public function available()
+    {
+        $games = Game::withCount('questions')
+            ->whereHas('questions')
+            ->latest()
+            ->get();
+
+        return inertia('games/available', [
+            'games' => $games,
+        ]);
+    }
+
+    public function play(Game $game)
+    {
+        if ($game->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $game->load('questions.choices');
+
+        return inertia('games/play', [
+            'game' => $game,
+        ]);
+    }
+
 }
