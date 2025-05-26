@@ -65,6 +65,13 @@ export default function GameIndex({ games }: Props) {
                                     </button>
                                 </div>
 
+                                {/* Invite Players button */}
+                                <div className="mt-1">
+                                    <Link href={`/games/${game.id}/invite`} className="text-sm text-purple-600 hover:underline">
+                                        Invite Players
+                                    </Link>
+                                </div>
+
                                 {/* Add Question button */}
                                 <div className="mt-3">
                                     <Link href={`/games/${game.id}/questions`} className="inline-block text-sm text-green-700 hover:underline">

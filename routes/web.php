@@ -5,7 +5,7 @@ use App\Models\QuizAttempt;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\LeaderboardController;
-
+use App\Http\Controllers\InvitationController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -13,9 +13,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+
+    // Dashboard with quiz history
     Route::get('/dashboard', function () {
         $attempts = QuizAttempt::with('game')
             ->where('user_id', auth()->id())
@@ -25,22 +24,34 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard', [
             'attempts' => $attempts,
         ]);
-    })->middleware(['auth', 'verified'])->name('dashboard');    
+    })->name('dashboard');
 
+    // Game management
     Route::resource('games', GameController::class);
-    Route::get('/games/{game}/questions', [GameController::class, 'manageQuestions'])
-    ->name('games.questions');
+    Route::get('/games/{game}/questions', [GameController::class, 'manageQuestions'])->name('games.questions');
+
+    // Question management
     Route::get('/games/{game}/questions/create', [QuestionController::class, 'create'])->name('questions.create');
     Route::post('/games/{game}/questions', [QuestionController::class, 'store'])->name('questions.store');
     Route::get('/questions/{question}/edit', [QuestionController::class, 'edit'])->name('questions.edit');
     Route::put('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
     Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+
+    // Invitations
+    Route::get('/games/{game}/invite', [InvitationController::class, 'create'])->name('invitations.create');
+    Route::post('/games/{game}/invite', [InvitationController::class, 'store'])->name('invitations.store');
+
+    // Gameplay
     Route::get('/play', [GameController::class, 'available'])->name('games.available');
-    Route::post('/play/{game}', [GameController::class, 'submit'])->name('games.submit');
     Route::get('/play/{game}', [GameController::class, 'play'])->name('games.play');
     Route::post('/play/{game}', [GameController::class, 'submit'])->name('games.submit');
+
+    // Leaderboard
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard');
 });
+
+// Public: Accept invitations
+Route::get('/invitation/{token}', [InvitationController::class, 'accept'])->name('invitations.accept');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

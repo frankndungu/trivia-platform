@@ -27,7 +27,7 @@ class GameController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'nullable|string|max:500',
         ]);
         $game = auth()->user()->games()->create($data);
         return redirect()->route('games.questions', $game->id)->with('success', 'Game created! Now add your questions.');
