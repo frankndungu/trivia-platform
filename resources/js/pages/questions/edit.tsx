@@ -1,6 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, router, useForm } from '@inertiajs/react';
+import { useState } from 'react';
 
 interface Choice {
     id: number;
@@ -35,9 +36,20 @@ export default function EditQuestion({ question }: Props) {
         })),
     });
 
+    const [showModal, setShowModal] = useState(false);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         put(`/questions/${question.id}`, {
+            onSuccess: () =>
+                router.visit(`/games/${question.game_id}/questions`, {
+                    preserveScroll: true,
+                }),
+        });
+    };
+
+    const handleDelete = () => {
+        router.delete(`/questions/${question.id}`, {
             onSuccess: () =>
                 router.visit(`/games/${question.game_id}/questions`, {
                     preserveScroll: true,
@@ -109,25 +121,33 @@ export default function EditQuestion({ question }: Props) {
                             Save Changes
                         </button>
 
-                        <button
-                            type="button"
-                            onClick={() => {
-                                if (confirm('Are you sure you want to delete this question?')) {
-                                    router.delete(`/questions/${question.id}`, {
-                                        onSuccess: () =>
-                                            router.visit(`/games/${question.game_id}/questions`, {
-                                                preserveScroll: true,
-                                            }),
-                                    });
-                                }
-                            }}
-                            className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-                        >
+                        <button type="button" onClick={() => setShowModal(true)} className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700">
                             Delete Question
                         </button>
                     </div>
                 </form>
             </div>
+
+            {showModal && (
+                <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs">
+                    <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+                        <h2 className="text-lg font-semibold">Confirm Deletion</h2>
+                        <p className="mt-2 text-sm text-gray-600">Are you sure you want to delete this question? This action cannot be undone.</p>
+
+                        <div className="mt-4 flex justify-end gap-3">
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100"
+                            >
+                                Cancel
+                            </button>
+                            <button onClick={handleDelete} className="rounded bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700">
+                                Yes, Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AppLayout>
     );
 }

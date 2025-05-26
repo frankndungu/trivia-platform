@@ -1,6 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
+import { useState } from 'react';
 
 interface Choice {
     choice_text: string;
@@ -31,6 +32,22 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function GameIndex({ games }: Props) {
+    const [showModal, setShowModal] = useState(false);
+    const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+
+    const openModal = (game: Game) => {
+        setSelectedGame(game);
+        setShowModal(true);
+    };
+
+    const handleDelete = () => {
+        if (selectedGame) {
+            router.delete(`/games/${selectedGame.id}`);
+            setShowModal(false);
+            setSelectedGame(null);
+        }
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Your Games" />
@@ -53,33 +70,23 @@ export default function GameIndex({ games }: Props) {
                                         Edit
                                     </Link>
 
-                                    <button
-                                        onClick={() => {
-                                            if (confirm('Are you sure you want to delete this game?')) {
-                                                router.delete(`/games/${game.id}`);
-                                            }
-                                        }}
-                                        className="text-sm text-red-600 hover:underline"
-                                    >
+                                    <button onClick={() => openModal(game)} className="text-sm text-red-600 hover:underline">
                                         Delete
                                     </button>
                                 </div>
 
-                                {/* Invite Players button */}
                                 <div className="mt-1">
                                     <Link href={`/games/${game.id}/invite`} className="text-sm text-purple-600 hover:underline">
                                         Invite Players
                                     </Link>
                                 </div>
 
-                                {/* Add Question button */}
                                 <div className="mt-3">
                                     <Link href={`/games/${game.id}/questions`} className="inline-block text-sm text-green-700 hover:underline">
                                         + Add New Question
                                     </Link>
                                 </div>
 
-                                {/* Show questions + choices */}
                                 {game.questions && game.questions.length > 0 && (
                                     <div className="mt-4">
                                         <h3 className="text-sm font-semibold text-gray-700">
@@ -97,7 +104,6 @@ export default function GameIndex({ games }: Props) {
                                                         ))}
                                                     </ul>
 
-                                                    {/* Manage button */}
                                                     <div className="mt-2">
                                                         <Link href={`/questions/${q.id}/edit`} className="text-sm text-indigo-600 hover:underline">
                                                             Manage Question
@@ -113,6 +119,29 @@ export default function GameIndex({ games }: Props) {
                     </ul>
                 )}
             </div>
+
+            {showModal && selectedGame && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs">
+                    <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+                        <h2 className="text-lg font-semibold">Delete Game</h2>
+                        <p className="mt-2 text-sm text-gray-600">
+                            Are you sure you want to delete <span className="font-medium">{selectedGame.title}</span>?
+                        </p>
+
+                        <div className="mt-4 flex justify-end gap-3">
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="rounded border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100"
+                            >
+                                Cancel
+                            </button>
+                            <button onClick={handleDelete} className="rounded bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700">
+                                Yes, Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AppLayout>
     );
 }
