@@ -132,6 +132,8 @@ Disclaimer: Mailtrap only sends emails to the owner only
 
 ## Screenshots
 
+![Dashboard](screenshots/dashboard.png)
+![Create Game](screenshots/new-game.png)
 ![Game List](screenshots/game-list.png)
 ![Quiz Flow](screenshots/quiz-play.png)
 ![Leaderboard](screenshots/leaderboard.png)
