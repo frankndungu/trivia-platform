@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use Illuminate\Http\Request;
+use App\Models\QuizAttempt;
 
 class GameController extends Controller
 {
@@ -135,6 +136,14 @@ class GameController extends Controller
             }
         }
 
+        QuizAttempt::create([
+            'user_id' => auth()->id(),
+            'game_id' => $game->id,
+            'score' => $correctCount,
+            'total' => $total,
+        ]);
+
+        // Result to show in frontend
         $score = [
             'correct' => $correctCount,
             'total' => $total,
