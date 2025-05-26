@@ -65,6 +65,13 @@ export default function GameIndex({ games }: Props) {
                                     </button>
                                 </div>
 
+                                {/* Add Question button */}
+                                <div className="mt-3">
+                                    <Link href={`/games/${game.id}/questions`} className="inline-block text-sm text-green-700 hover:underline">
+                                        + Add New Question
+                                    </Link>
+                                </div>
+
                                 {/* Show questions + choices */}
                                 {game.questions && game.questions.length > 0 && (
                                     <div className="mt-4">

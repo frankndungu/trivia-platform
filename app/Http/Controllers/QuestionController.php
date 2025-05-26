@@ -11,9 +11,15 @@ class QuestionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Game $game)
     {
-        //
+        if ($game->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return inertia('questions/create', [
+            'game' => $game,
+        ]);
     }
 
     /**
