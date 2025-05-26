@@ -46,7 +46,17 @@ export default function ManageQuestions({ game }: Props) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post(`/games/${game.id}/questions`, {
-            onSuccess: () => reset(),
+            onSuccess: () => {
+                setData({
+                    question_text: '',
+                    choices: [
+                        { choice_text: '', is_correct: false },
+                        { choice_text: '', is_correct: false },
+                        { choice_text: '', is_correct: false },
+                        { choice_text: '', is_correct: false },
+                    ],
+                });
+            },
         });
     };
 
