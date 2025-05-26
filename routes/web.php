@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\QuizAttempt;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\QuestionController;
 
@@ -14,6 +15,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+    Route::get('/dashboard', function () {
+        $attempts = QuizAttempt::with('game')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return Inertia::render('dashboard', [
+            'attempts' => $attempts,
+        ]);
+    })->middleware(['auth', 'verified'])->name('dashboard');    
 
     Route::resource('games', GameController::class);
     Route::get('/games/{game}/questions', [GameController::class, 'manageQuestions'])
