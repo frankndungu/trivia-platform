@@ -2,6 +2,7 @@ import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface Choice {
     choice_text: string;
@@ -33,19 +34,29 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function GameIndex({ games }: Props) {
     const [showModal, setShowModal] = useState(false);
-    const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+    const [selectedGameId, setSelectedGameId] = useState<number | null>(null);
+    const [selectedGameTitle, setSelectedGameTitle] = useState<string>('');
 
-    const openModal = (game: Game) => {
-        setSelectedGame(game);
+    const openDeleteModal = (id: number, title: string) => {
+        setSelectedGameId(id);
+        setSelectedGameTitle(title);
         setShowModal(true);
     };
 
     const handleDelete = () => {
-        if (selectedGame) {
-            router.delete(`/games/${selectedGame.id}`);
-            setShowModal(false);
-            setSelectedGame(null);
-        }
+        if (!selectedGameId) return;
+
+        router.delete(`/games/${selectedGameId}`, {
+            onSuccess: () => {
+                toast.success('Game deleted successfully');
+                setShowModal(false);
+                setSelectedGameId(null);
+                setSelectedGameTitle('');
+            },
+            onError: () => {
+                toast.error('Failed to delete game');
+            },
+        });
     };
 
     return (
@@ -70,7 +81,7 @@ export default function GameIndex({ games }: Props) {
                                         Edit
                                     </Link>
 
-                                    <button onClick={() => openModal(game)} className="text-sm text-red-600 hover:underline">
+                                    <button onClick={() => openDeleteModal(game.id, game.title)} className="text-sm text-red-600 hover:underline">
                                         Delete
                                     </button>
                                 </div>
@@ -103,7 +114,6 @@ export default function GameIndex({ games }: Props) {
                                                             </li>
                                                         ))}
                                                     </ul>
-
                                                     <div className="mt-2">
                                                         <Link href={`/questions/${q.id}/edit`} className="text-sm text-indigo-600 hover:underline">
                                                             Manage Question
@@ -120,12 +130,12 @@ export default function GameIndex({ games }: Props) {
                 )}
             </div>
 
-            {showModal && selectedGame && (
+            {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xs">
                     <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-                        <h2 className="text-lg font-semibold">Delete Game</h2>
+                        <h2 className="text-lg font-semibold">Confirm Deletion</h2>
                         <p className="mt-2 text-sm text-gray-600">
-                            Are you sure you want to delete <span className="font-medium">{selectedGame.title}</span>?
+                            Are you sure you want to delete <span className="font-medium">{selectedGameTitle}</span>?
                         </p>
 
                         <div className="mt-4 flex justify-end gap-3">
