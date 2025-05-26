@@ -138,11 +138,6 @@ Disclaimer: Mailtrap only sends emails to the owner only
 
 ---
 
-## Author
-
-Built by **Francis Ndungu**  
----
-
 ## License
 
 This project is open-source under the MIT License.
