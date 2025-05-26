@@ -141,9 +141,6 @@ Disclaimer: Mailtrap only sends emails to the owner only
 ## Author
 
 Built by **Francis Ndungu**  
-GitHub: [@ndungufrank](https://github.com/ndungufrank)  
-Email: [ndungufrank@gmail.com](mailto:ndungufrank@gmail.com)
-
 ---
 
 ## License
