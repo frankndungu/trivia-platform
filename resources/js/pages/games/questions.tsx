@@ -45,7 +45,7 @@ export default function ManageQuestions({ game }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(`/api/v1/games/${game.id}/questions`, {
+        post(`/games/${game.id}/questions`, {
             onSuccess: () => reset(),
         });
     };

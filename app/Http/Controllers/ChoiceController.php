@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Game;
 use App\Models\Choice;
 use Illuminate\Http\Request;
 
@@ -44,7 +45,16 @@ class ChoiceController extends Controller
      */
     public function edit(Choice $choice)
     {
-        //
+        // Optional: ensure user owns the related game
+        $choice->load('question.game');
+
+        if ($choice->question->game->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return inertia('choices/edit', [
+            'choice' => $choice,
+        ]);
     }
 
     /**
@@ -52,7 +62,20 @@ class ChoiceController extends Controller
      */
     public function update(Request $request, Choice $choice)
     {
-        //
+        $choice->load('question.game');
+
+        if ($choice->question->game->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'choice_text' => 'required|string|max:255',
+            'is_correct' => 'required|boolean',
+        ]);
+
+        $choice->update($data);
+
+        return redirect()->back()->with('success', 'Choice updated successfully.');
     }
 
     /**
@@ -60,6 +83,15 @@ class ChoiceController extends Controller
      */
     public function destroy(Choice $choice)
     {
-        //
+        $choice->load('question.game');
+
+        if ($choice->question->game->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $choice->delete();
+
+        return redirect()->back()->with('success', 'Choice deleted.');
     }
+
 }
