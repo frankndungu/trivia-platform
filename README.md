@@ -22,10 +22,11 @@ TriviaHub is a full-stack gamified trivia platform built with Laravel + Inertia 
 
 | Layer         | Technology               |
 | ------------- | ------------------------ |
-| Backend       | Laravel 12 (Monolith)    |
+| Architecture  | Monolith                 |
+| Backend       | Laravel 12               |
 | Frontend      | React + Inertia.js       |
 | Auth          | Laravel Breeze + Sanctum |
-| Database      | PostgreSQL (or MySQL)    |
+| Database      | PostgreSQL               |
 | Styling       | Tailwind CSS             |
 | Icons         | Lucide Icons             |
 | Mail Delivery | Laravel Mail + Mailtrap  |
